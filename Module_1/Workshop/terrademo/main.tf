@@ -8,29 +8,31 @@ terraform {
 }
 
 provider "google" {
-  project = "dtc-de-course-485520"
-  region  = "us-central1"
+  project = var.project
+  region  = var.region
 }
 
-resource "google_storage_bucket" "data-lake-bucket" {
-  name          = "dtc-de-course-485520-terra-bucket"
-  location      = "US"
+
+resource "google_storage_bucket" "demo-bucket" {
+  name          = var.gcs_bucket_name
+  location      = var.location
   force_destroy = true
 
-  # Optional, but recommended settings:
-  storage_class               = "STANDARD"
+  public_access_prevention    = "enforced"
   uniform_bucket_level_access = true
 
-  versioning {
-    enabled = true
-  }
 
   lifecycle_rule {
-    action {
-      type = "Delete"
-    }
     condition {
-      age = 30 // days
+      age = 1
+    }
+    action {
+      type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
