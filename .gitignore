@@ -1,6 +1,6 @@
 *.parquet
 *.csv
-
+dtc-de-course-485520-b7507d787736.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
